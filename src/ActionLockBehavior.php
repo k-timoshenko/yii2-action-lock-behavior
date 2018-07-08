@@ -195,7 +195,7 @@ class ActionLockBehavior extends Behavior
      */
     protected function log(string $message, int $level): void
     {
-        $this->log($message, Logger::LEVEL_INFO);
+        $this->output($message);
 
         if ($this->logger === null) {
             return;
