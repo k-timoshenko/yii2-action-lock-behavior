@@ -130,6 +130,8 @@ class Source extends BaseObject implements ISource
         }
         file_put_contents($filePath, $this->pid);
         @chmod($filePath, 0777);
+
+        return true;
     }
 
     /**
