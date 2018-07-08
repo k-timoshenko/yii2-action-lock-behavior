@@ -48,5 +48,5 @@ public function behaviors()
 ## Db source
 
 ```
-yii migrate --migrationPath=@vendor/t-kanstantsin/src/Db/migrations
+yii migrate --migrationPath=@vendor/t-kanstantsin/yii2-action-lock-behavior/src/Db/migrations
 ```
