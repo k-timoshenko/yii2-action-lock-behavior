@@ -54,10 +54,7 @@ class Source extends BaseObject implements ISource
             return false;
         }
 
-        $pid = file_get_contents($filePath);
-        $pid = trim(preg_replace("/\r|\n/", '', $pid));
-
-        return $pid === $this->pid;
+        return $this->readPidFromFile($filePath) === $this->pid;
     }
 
     /**
