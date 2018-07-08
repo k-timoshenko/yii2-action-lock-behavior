@@ -32,9 +32,6 @@ class Source extends BaseObject implements ISource
             throw new InvalidConfigException('Path for PID cannot be empty');
         }
         if (!file_exists($this->basePidPath)) {
-            if (!is_writable($this->basePidPath)) {
-                throw new \RuntimeException(sprintf('Path `%s` must be writable', $this->basePidPath));
-            }
             if (!is_dir($this->basePidPath) && !mkdir($concurrentDirectory = $this->basePidPath) && !is_dir($concurrentDirectory)) {
                 throw new \RuntimeException(sprintf('Directory `%s` was not created', $concurrentDirectory));
             }
