@@ -1,0 +1,34 @@
+{
+  "name": "t-kanstantsin/yii2-action-lock-behavior",
+  "description": "Allow run only one action instance at once",
+  "type": "library",
+  "keywords": [
+    "yii2",
+    "behavior"
+  ],
+  "homepage": "https://github.com/t-kanstantsin/yii2-action-lock-behavior",
+  "license": "BSD-3-Clause",
+  "authors": [
+    {
+      "name": "Konstantin Timoshenko",
+      "email": "t.kanstantsin@gmail.com",
+      "homepage": "https://github.com/t-kanstantsin",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=7.1",
+    "yiisoft/yii2": "^2.0.10",
+    "psr/log": "^1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "tkanstantsin\\Yii2ActionLockBehavior\\": "src"
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0.x-dev"
+    }
+  }
+}
