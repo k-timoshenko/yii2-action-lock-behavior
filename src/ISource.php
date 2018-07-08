@@ -2,6 +2,9 @@
 
 namespace tkanstantsin\Yii2ActionLockBehavior;
 
+/**
+ * Interface ISource
+ */
 interface ISource
 {
     /**

@@ -6,6 +6,9 @@ use tkanstantsin\Yii2ActionLockBehavior\ISource;
 use yii\base\BaseObject;
 use yii\base\InvalidConfigException;
 
+/**
+ * Class Source
+ */
 class Source extends BaseObject implements ISource
 {
     /**
