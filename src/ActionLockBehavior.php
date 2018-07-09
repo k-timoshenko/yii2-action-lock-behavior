@@ -73,7 +73,7 @@ class ActionLockBehavior extends Behavior
     {
         parent::init();
 
-        if ($this->logger !== NULL) {
+        if ($this->logger !== null) {
             $this->logger = Instance::ensure($this->logger, Logger::class);
         }
 
@@ -100,7 +100,7 @@ class ActionLockBehavior extends Behavior
             $this->pid = \call_user_func($this->pid, $event);
         } else {
             // try get route if behavior attached to action/controller
-            $this->pid = $event->action->controller->module->requestedRoute ?? NULL;
+            $this->pid = $event->action->controller->module->requestedRoute ?? null;
         }
 
         if (mb_strlen($this->pid) > $this->pidLengthLimit) {
@@ -138,8 +138,8 @@ class ActionLockBehavior extends Behavior
      */
     public function lock(): bool
     {
-        if ($this->pid === NULL || $this->pid === ''
-            || $this->uid === NULL || $this->uid === ''
+        if ($this->pid === null || $this->pid === ''
+            || $this->uid === null || $this->uid === ''
         ) {
             $this->log('PID and UID cannot be empty', Logger::LEVEL_INFO);
 
@@ -205,7 +205,7 @@ class ActionLockBehavior extends Behavior
     {
         $this->output($message);
 
-        if ($this->logger === NULL) {
+        if ($this->logger === null) {
             return;
         }
 
