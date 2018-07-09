@@ -10,7 +10,9 @@ use yii\db\Transaction;
 use yii\di\Instance;
 
 /**
- * Class Source
+ * Class    Source
+ * @package tkanstantsin\Yii2ActionLockBehavior\Db
+ * @version 1.0
  */
 class Source extends BaseObject implements ISource
 {
@@ -18,6 +20,7 @@ class Source extends BaseObject implements ISource
      * @var Connection|string
      */
     public $connection;
+
     /**
      * @var string
      */
@@ -67,7 +70,7 @@ class Source extends BaseObject implements ISource
         try {
             return (bool) $this->connection->createCommand()
                 ->insert($this->tableName, [
-                    'id' => $id,
+                    'id'  => $id,
                     'pid' => $pid,
                 ])
                 ->execute();
