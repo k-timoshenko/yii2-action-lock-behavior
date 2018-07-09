@@ -42,17 +42,17 @@ class Source extends BaseObject implements ISource
      */
     public function ensureActive(string $pid, ?string $id): bool
     {
-        if ($this->connection->transaction === null || !$this->connection->transaction->isActive) {
+        if ($this->connection->transaction === null
+            || !$this->connection->transaction->isActive
+        ) {
             return false;
         }
 
-        $lock = (new Query())
+        return (bool) (new Query())
             ->from($this->tableName)
             ->andFilterWhere(['id' => $id])
             ->andWhere(['pid' => $pid])
             ->exists($this->connection);
-
-        return $lock;
     }
 
     /**
