@@ -31,7 +31,7 @@ class M130524201442CreatePidLock extends Migration
             'pid' => $this->string(255)->notNull()->unique()->comment('process'),
         ]);
 
-        $this->createIndex('pid_lock_route_uidx', $this->tLock, 'pid', true);
+        $this->createIndex('pid_lock_pid_uidx', $this->tLock, 'pid', true);
     }
 
     /**
