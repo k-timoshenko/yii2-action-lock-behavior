@@ -9,14 +9,14 @@ Configuration example:
 return [
     'components' => [
         'lockDb' => [
-            'class'             => yii\db\Connection::class,
-            'dsn'               => 'mysql:host=__MYSQL_HOST__;dbname=__MYSQL_DATABASE__',
-            'username'          => '__MYSQL_USERNAME__',
-            'password'          => '__MYSQL_PASSWORD__',
-            'charset'           => 'utf8',
-            'enableQueryCache'  => YII_ENV_PROD && !YII_DEBUG,
+            'class' => yii\db\Connection::class,
+            'dsn' => 'mysql:host=__MYSQL_HOST__;dbname=__MYSQL_DATABASE__',
+            'username' => '__MYSQL_USERNAME__',
+            'password' => '__MYSQL_PASSWORD__',
+            'charset' => 'utf8',
+            'enableQueryCache' => YII_ENV_PROD && !YII_DEBUG,
             'enableSchemaCache' => YII_ENV_PROD && !YII_DEBUG,
-            'attributes'        => [
+            'attributes' => [
                 // Permanent mysql connection
                 PDO::ATTR_PERSISTENT => true,
                 // Or 
@@ -25,9 +25,9 @@ return [
         ],
         
         'migrate' => [
-            'class'               => yii\console\controllers\MigrateController::class,
+            'class' => yii\console\controllers\MigrateController::class,
             // set false if you use namespaces
-            'migrationPath'       => '@console/migrations',
+            'migrationPath' => '@console/migrations',
             'migrationNamespaces' => [
                 // ...
                 'tkanstantsin\Yii2ActionLockBehavior\Db\migrations',
@@ -58,7 +58,7 @@ class OrdersController extends Controller
     {
         return [
             'dbPid' => [
-                'class'  => ActionLockBehavior::class,
+                'class' => ActionLockBehavior::class,
                 'source' => new DbSource([
                     'connection' => \Yii::$app->lockDb,
                 ]),

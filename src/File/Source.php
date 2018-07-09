@@ -7,7 +7,7 @@ use yii\base\BaseObject;
 use yii\base\InvalidConfigException;
 
 /**
- * Class    Source
+ * Class Source
  * @package tkanstantsin\Yii2ActionLockBehavior\File
  * @version 1.0
  */
@@ -75,7 +75,7 @@ class Source extends BaseObject implements ISource
     public function lock(string $fileName, string $uid): bool
     {
         $filePath = $this->getPidPath($fileName);
-        $pid      = $this->readPidFromFile($filePath);
+        $pid = $this->readPidFromFile($filePath);
 
         // Check if process yet exist in proc
         if ($pid !== null && file_exists('/proc/' . $pid)) {

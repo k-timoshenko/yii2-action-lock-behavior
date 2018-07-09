@@ -24,7 +24,7 @@ class OrdersController extends Controller
     {
         return [
             'filePid' => [
-                'class'  => ActionLockBehavior::class,
+                'class' => ActionLockBehavior::class,
                 'source' => new FileSource([
                     'basePidPath' => \Yii::getAlias('@runtime/pid'),
                 ]),

@@ -10,7 +10,7 @@ use yii\helpers\Console;
 use yii\log\Logger;
 
 /**
- * Class    ActionLockBehavior
+ * Class ActionLockBehavior
  * @package tkanstantsin\Yii2ActionLockBehavior
  * @version 1.0
  */
@@ -87,7 +87,7 @@ class ActionLockBehavior extends Behavior
     {
         return ArrayHelper::merge(parent::events(), [
             Controller::EVENT_BEFORE_ACTION => 'beforeAction',
-            Controller::EVENT_AFTER_ACTION  => 'afterAction',
+            Controller::EVENT_AFTER_ACTION => 'afterAction',
         ]);
     }
 
@@ -199,7 +199,7 @@ class ActionLockBehavior extends Behavior
 
     /**
      * @param string $message
-     * @param int    $level
+     * @param int $level
      */
     protected function log(string $message, int $level): void
     {
