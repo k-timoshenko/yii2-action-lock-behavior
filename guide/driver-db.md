@@ -60,7 +60,12 @@ class OrdersController extends Controller
             'dbPid' => [
                 'class' => ActionLockBehavior::class,
                 'source' => new DbSource([
-                    'connection' => \Yii::$app->lockDb,
+                    // Use exist component (recommended)
+                    'connection' => 'db',
+                    
+                    // Use new component
+                    // 'connection'     => \Yii::$app->lockDb,
+                    // 'connectionCopy' => false,
                 ]),
             ],
         ];
