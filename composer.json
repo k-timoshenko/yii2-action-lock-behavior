@@ -23,7 +23,7 @@
   },
   "autoload": {
     "psr-4": {
-      "tkanstantsin\\Yii2ActionLockBehavior\\": "./src"
+      "tkanstantsin\\Yii2ActionLockBehavior\\": "src/"
     }
   },
   "extra": {
