@@ -34,7 +34,11 @@ class Source extends BaseObject implements ISource
     {
         parent::init();
 
-        $this->connection = Instance::ensure($this->connection, Connection::class);
+        if ($this->connection instanceof Connection) {
+            $this->connection = Instance::ensure($this->connection, Connection::class);
+        } else {
+            $this->connection = Instance::of($this->connection)->get();
+        }
     }
 
     /**
