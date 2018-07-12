@@ -70,7 +70,7 @@ class Source extends BaseObject implements ISource
      */
     public function ensureActive(string $pid, ?string $id): bool
     {
-        if ($this->connection->transaction === NULL
+        if ($this->connection->transaction === null
             || !$this->connection->transaction->isActive
         ) {
             return false;
@@ -91,7 +91,7 @@ class Source extends BaseObject implements ISource
         $this->connection->beginTransaction(Transaction::READ_UNCOMMITTED);
 
         // check if another process lock this pid
-        if ($this->ensureActive($pid, NULL)) { // better performance than just trying to save
+        if ($this->ensureActive($pid, null)) { // better performance than just trying to save
             return false;
         }
 
@@ -113,7 +113,7 @@ class Source extends BaseObject implements ISource
      */
     public function free(string $pid, string $id): bool
     {
-        if ($this->connection->transaction !== NULL
+        if ($this->connection->transaction !== null
             && $this->connection->transaction->isActive
         ) {
             $this->connection->transaction->rollBack();
