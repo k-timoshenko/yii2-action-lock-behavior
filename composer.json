@@ -25,10 +25,5 @@
     "psr-4": {
       "tkanstantsin\\Yii2ActionLockBehavior\\": "src/"
     }
-  },
-  "extra": {
-    "branch-alias": {
-      "dev-master": "1.0.x-dev"
-    }
   }
 }
