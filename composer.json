@@ -1,7 +1,7 @@
 {
   "name": "t-kanstantsin/yii2-action-lock-behavior",
   "description": "Allow run only one action instance at once",
-  "type": "library",
+  "type": "yii2-extension",
   "keywords": [
     "yii2",
     "behavior"
