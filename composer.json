@@ -18,7 +18,7 @@
   ],
   "require": {
     "php": ">=7.1",
-    "ext-mbstring": "^7.2",
+    "ext-mbstring": "^7.1",
     "malkusch/lock": "^1.4",
     "psr/log": "^1.0",
     "yiisoft/yii2": "^2.0.10"
