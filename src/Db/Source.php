@@ -5,45 +5,33 @@ namespace tkanstantsin\Yii2ActionLockBehavior\Db;
 use tkanstantsin\Yii2ActionLockBehavior\ISource;
 use yii\base\BaseObject;
 use yii\db\Connection;
-use yii\db\Query;
-use yii\db\Transaction;
 use yii\di\Instance;
-use yii\helpers\ArrayHelper;
+use malkusch\lock\mutex\MySQLMutex;
 
 /**
  * Class Source
  * @package tkanstantsin\Yii2ActionLockBehavior\Db
- * @author  Konstantin Timoshenko
- * @author  Yarmaliuk Mikhail
- * @version 1.1
- *
- * @since   1.1 add copy exist connection
- * @since   1.0 need new connection config
+ * @version 1.0
  */
 class Source extends BaseObject implements ISource
 {
+    private const PID_MAX_LENGTH = 64;
+
     /**
      * @var Connection|string
      */
     public $connection;
 
     /**
-     * @var bool
+     * Time to wait for lock
+     * @var int
      */
-    public $connectionCopy = true;
+    public $timeout = 0;
 
     /**
-     * @var array
+     * @var MySQLMutex
      */
-    public $connectionAttributes = [
-        // Permanent mysql connection
-        \PDO::ATTR_PERSISTENT => true,
-    ];
-
-    /**
-     * @var string
-     */
-    public $tableName = '{{%pid_lock}}';
+    private $mutex;
 
     /**
      * @inheritdoc
@@ -53,15 +41,6 @@ class Source extends BaseObject implements ISource
     {
         parent::init();
 
-        if ($this->connectionCopy) {
-            $this->connection = Instance::of($this->connection)->get();
-            // Merger connection attributes
-            $this->connection->attributes = ArrayHelper::merge(
-                (array) $this->connection->attributes,
-                (array) $this->connectionAttributes
-            );
-        }
-
         $this->connection = Instance::ensure($this->connection, Connection::class);
     }
 
@@ -70,17 +49,7 @@ class Source extends BaseObject implements ISource
      */
     public function ensureActive(string $pid, ?string $id): bool
     {
-        if ($this->connection->transaction === null
-            || !$this->connection->transaction->isActive
-        ) {
-            return false;
-        }
-
-        return (bool) (new Query())
-            ->from($this->tableName)
-            ->andFilterWhere(['id' => $id])
-            ->andWhere(['pid' => $pid])
-            ->exists($this->connection);
+        return true;
     }
 
     /**
@@ -88,20 +57,11 @@ class Source extends BaseObject implements ISource
      */
     public function lock(string $pid, string $id): bool
     {
-        $this->connection->beginTransaction(Transaction::READ_UNCOMMITTED);
-
-        // check if another process lock this pid
-        if ($this->ensureActive($pid, null)) { // better performance than just trying to save
-            return false;
-        }
-
         try {
-            return (bool) $this->connection->createCommand()
-                ->insert($this->tableName, [
-                    'id'  => $id,
-                    'pid' => $pid,
-                ])
-                ->execute();
+            $this->mutex = $this->createMutex($pid, $this->timeout);
+            $this->mutex->lock();
+
+            return true;
         } catch (\Exception $e) {
             return false;
         }
@@ -109,16 +69,35 @@ class Source extends BaseObject implements ISource
 
     /**
      * @inheritdoc
-     * @throws \yii\db\Exception
+     * @throws \malkusch\lock\exception\LockReleaseException
      */
     public function free(string $pid, string $id): bool
     {
-        if ($this->connection->transaction !== null
-            && $this->connection->transaction->isActive
-        ) {
-            $this->connection->transaction->rollBack();
+        if ($this->mutex !== null) {
+            $this->mutex->unlock();
         }
 
         return true;
+    }
+
+    /**
+     * @param string $pid
+     *
+     * @return MysqlMutex
+     * @throws \yii\db\Exception
+     */
+    protected function createMutex(string $pid, int $timeout): MysqlMutex
+    {
+        $this->connection->open();
+
+        return new MySQLMutex($this->connection->pdo, $pid, $timeout);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getPidMaxLength(): int
+    {
+        return self::PID_MAX_LENGTH;
     }
 }

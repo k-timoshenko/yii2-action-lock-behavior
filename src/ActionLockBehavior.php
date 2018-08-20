@@ -93,6 +93,7 @@ class ActionLockBehavior extends Behavior
 
     /**
      * @inheritdoc
+     * @throws \Exception
      */
     public function beforeAction($event): bool
     {
@@ -103,7 +104,7 @@ class ActionLockBehavior extends Behavior
             $this->pid = $event->action->controller->module->requestedRoute ?? null;
         }
 
-        if (mb_strlen($this->pid) > $this->pidLengthLimit) {
+        if (mb_strlen($this->pid) > $this->source->getPidMaxLength()) {
             $this->log(sprintf('PID length must be smaller than %s symbols', $this->pidLengthLimit), Logger::LEVEL_INFO);
 
             return $event->isValid = false;

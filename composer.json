@@ -18,12 +18,23 @@
   ],
   "require": {
     "php": ">=7.1",
-    "yiisoft/yii2": "^2.0.10",
-    "psr/log": "^1.0"
+    "ext-mbstring": "^7.2",
+    "malkusch/lock": "^1.4",
+    "psr/log": "^1.0",
+    "yiisoft/yii2": "^2.0.10"
   },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    }
+  ],
   "autoload": {
     "psr-4": {
       "tkanstantsin\\Yii2ActionLockBehavior\\": "src/"
     }
+  },
+  "config": {
+    "sort-packages": true
   }
 }

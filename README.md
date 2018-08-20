@@ -13,4 +13,4 @@ Lock source should be chosen carefully noting following:
 
 - [__File source__](guide/driver-db.md) simple but can be used _only with one docker container instance_ because its not possible determine if process still running or ended in another container. Requires only writable directory
 
-- [__Db source__](guide/driver-file.md) requires database with transaction support. May be used only with single database instance.
+- [__Db source__](guide/driver-file.md) requires mysql connection. May be used only with single database instance.

@@ -23,16 +23,6 @@ return [
                 // PDO::ATTR_TIMEOUT => 36000,
             ],
         ],
-        
-        'migrate' => [
-            'class' => yii\console\controllers\MigrateController::class,
-            // set false if you use namespaces
-            'migrationPath' => '@console/migrations',
-            'migrationNamespaces' => [
-                // ...
-                'tkanstantsin\Yii2ActionLockBehavior\Db\migrations',
-            ],
-        ],
     ],
 ];
 ```

@@ -180,4 +180,12 @@ class Source extends BaseObject implements ISource
 
         return (int) trim(preg_replace("/\r|\n/", '', $pid));
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getPidMaxLength(): int
+    {
+        return ISource::DEFAULT_PID_MAX_LENGTH;
+    }
 }
