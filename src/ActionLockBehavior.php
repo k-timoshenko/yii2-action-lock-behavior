@@ -8,20 +8,22 @@ use yii\di\Instance;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Console;
 use yii\log\Logger;
+use yii\mutex\Mutex;
 
 /**
  * Class ActionLockBehavior
- * @package tkanstantsin\Yii2ActionLockBehavior
- * @version 1.0
  */
 class ActionLockBehavior extends Behavior
 {
+    /**
+     * MySQL GET_LOCK limit.
+     */
     public const PID_LENGTH_LIMIT = 255;
 
     /**
-     * @var ISource
+     * @var Mutex
      */
-    public $source;
+    public $mutex = 'mutex';
 
     /**
      * Whether to send messages into terminal or not
@@ -62,7 +64,15 @@ class ActionLockBehavior extends Behavior
      */
     public function __destruct()
     {
-        $this->free();
+        $this->free(false);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPid(): ?string
+    {
+        return $this->pid;
     }
 
     /**
@@ -77,7 +87,7 @@ class ActionLockBehavior extends Behavior
             $this->logger = Instance::ensure($this->logger, Logger::class);
         }
 
-        $this->source = Instance::ensure($this->source, ISource::class);
+        $this->mutex = Instance::ensure($this->mutex, Mutex::class);
     }
 
     /**
@@ -104,7 +114,7 @@ class ActionLockBehavior extends Behavior
             $this->pid = $event->action->controller->module->requestedRoute ?? null;
         }
 
-        if (mb_strlen($this->pid) > $this->source->getPidMaxLength()) {
+        if (mb_strlen($this->pid) > self::PID_LENGTH_LIMIT) {
             $this->log(sprintf('PID length must be smaller than %s symbols', $this->pidLengthLimit), Logger::LEVEL_INFO);
 
             return $event->isValid = false;
@@ -133,7 +143,7 @@ class ActionLockBehavior extends Behavior
 
     /**
      * Check process pid (for linux system)
-     * @see ISource::lock()
+     * @see Mutex::acquire()
      *
      * @return bool
      */
@@ -147,7 +157,7 @@ class ActionLockBehavior extends Behavior
             return false;
         }
 
-        $locked = $this->source->lock($this->pid, $this->uid);
+        $locked = $this->mutex->acquire($this->pid, 0);
 
         if (!$locked) {
             $this->log("PID `{$this->pid}` already locked", Logger::LEVEL_INFO);
@@ -157,29 +167,19 @@ class ActionLockBehavior extends Behavior
     }
 
     /**
-     * Touch lock if it exist or db is gone away
-     * @see ISource::ensureActive()
-     */
-    public function ensureActive(): bool
-    {
-        $locked = $this->source->ensureActive($this->pid, $this->uid);
-
-        if (!$locked) {
-            $this->log("PID lock for `{$this->pid}` expired", Logger::LEVEL_INFO);
-        }
-
-        return $locked;
-    }
-
-    /**
-     * @see ISource::free()
+     * @see Mutex::release()
+     * @param bool $verbose
      * @return bool
      */
-    public function free(): bool
+    public function free(bool $verbose = true): bool
     {
-        $freed = $this->source->free($this->pid, $this->uid);
+        if ($this->mutex === null) {
+            return true;
+        }
 
-        if (!$freed) {
+        $freed = $this->mutex->release($this->pid);
+
+        if ($verbose && !$freed) {
             $this->log("Cannot free PID `{$this->pid}` from source", Logger::LEVEL_INFO);
         }
 
